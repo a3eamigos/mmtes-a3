@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [main]
 
-# permissions:
-#   contents: write  # Permissão para criar releases
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,24 +36,11 @@ jobs:
       run: |
         python -m unittest discover
 
-    - name: Verificar e criar nova tag se necessário
-      id: tag-check
-      run: |
-        TAG_NAME="v$(git tag | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -n 1 | awk -F. -v OFS=. '{$1=$1+0; print}')"
-        if [ -z "$TAG_NAME" ]; then
-          TAG_NAME="v0.1.0"  # Caso não haja tags, comece do zero
-        else
-          IFS='.' read -r MAJOR MINOR PATCH <<< "${TAG_NAME:1}"
-          TAG_NAME="v$((MAJOR)).$((MINOR)).$((PATCH + 1))"  # Incrementa a patch version
-        fi
-        echo "Nova tag: $TAG_NAME"
-        echo "tag_name=$TAG_NAME" >> $GITHUB_ENV
-
     - name: Gerar versão semântica
       id: version
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN  }}
       with:
         tag_name: v${{ github.run_number }}
-        release_name: "Release v${{ github.run_number }}"
+        release_name: "Release v${{ github.run_number }}"
