@@ -1,10 +1,10 @@
-name: CI Pipeline
+name: Python application
 
 on:
   push:
-    branches: [main, mateus]
+    branches: ["main","**"]
   pull_request:
-    branches: [main, mateus]
+    branches: ["main", "**"]
 
 jobs:
   build:
@@ -15,10 +15,25 @@ jobs:
     - name: Checar código
       uses: actions/checkout@v4
 
-    - name: Verificar mensagem de commit
+    - name: Verificador de Conventional Commits para eventos de Pull Request
+      if: github.event_name == 'pull_request'
+      uses: agenthunt/conventional-commit-checker-action@v2.0.0
+      with:
+        pr-title-regex: "^(.+)(?:(([^)s]+)))?: (.+)"
+        pr-body-regex: "(.*)"  # Permitir corpo vazio ou qualquer texto
+    
+    
+
+    - name: Verificador de Conventional Commits para eventos de Push
+      if: github.event_name == 'push'
       run: |
-        if ! git log -1 --pretty=format:%s | grep -E '^(feat|fix|chore|docs|refactor|test|style):'; then
-          echo "Erro: O commit deve começar com um dos seguintes prefixos: feat, fix, chore, docs, refactor, test, style."
+        # Checks the latest commit message for conventional format
+        last_commit_message=$(git log -1 --pretty=%B)
+        echo "Last commit message: $last_commit_message"
+        # Define a regex for conventional commits
+        regex="^(feat|fix|docs|style|refactor|perf|test|chore)(\(.+\))?: .+$"
+        if [[ ! $last_commit_message =~ $regex ]]; then
+          echo "A mensagem de commit não segue o padrão de Conventional Commits. (Commit message does not follow Conventional Commits format)"
           exit 1
         fi
 
