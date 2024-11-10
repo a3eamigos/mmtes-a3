@@ -5,7 +5,7 @@ import database
 from datetime import datetime
 
 def exibir_menu_principal(user_id):
-    janela = Tk()  # Cria uma nova janela, sem bloquear o loop principal
+    janela = Tk()  # Cria uma nova janela
     janela.title("Relato Popular - Menu Principal")
     janela.geometry("400x500")
 
@@ -126,7 +126,7 @@ def exibir_menu_principal(user_id):
 
 # menu_principal.py
 def exibir_tela_administracao():
-    janela_admin = Toplevel()
+    janela_admin = Tk()
     janela_admin.title("Administração - Todas as Denúncias")
     janela_admin.geometry("500x600")
 
