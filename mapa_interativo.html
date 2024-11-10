@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_890bd9927d51de3bfc0302ed4f6c040b {
+                #map_149c3e144875ddd0522ae53a4d12b5e1 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -39,15 +39,34 @@
 <body>
     
     
-            <div class="folium-map" id="map_890bd9927d51de3bfc0302ed4f6c040b" ></div>
+            <div class="folium-map" id="map_149c3e144875ddd0522ae53a4d12b5e1" ></div>
         
 </body>
 <script>
     
     
+            var map_149c3e144875ddd0522ae53a4d12b5e1 = L.map(
+                "map_149c3e144875ddd0522ae53a4d12b5e1",
+                {
+                    center: [-12.9714, -38.5014],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
             
 
         
     
+            var tile_layer_6daf2f6fcc1ade0e2f42a285851032f7 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            );
+        
+    
+            tile_layer_6daf2f6fcc1ade0e2f42a285851032f7.addTo(map_149c3e144875ddd0522ae53a4d12b5e1);
+        
 </script>
 </html>
