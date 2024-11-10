@@ -21,9 +21,12 @@ def realizar_login():
     senha = entry_senha.get()
     user = database.check_login(email, senha)
     if user:
-        messagebox.showinfo("Sucesso", "Login realizado com sucesso!")
-        janela.destroy()  # Fecha a janela de login
-        menu_principal.exibir_menu_principal(user_id=user[0])  # Passa o ID do usuário para o menu principal
+            messagebox.showinfo("Sucesso", "Login realizado com sucesso!")
+            janela.destroy()
+            if email == "admin" and senha == "admin":
+                menu_principal.exibir_tela_administracao()
+            else:
+                menu_principal.exibir_menu_principal(user_id=user[0])
     else:
         messagebox.showerror("Erro", "E-mail ou senha incorretos.")
 

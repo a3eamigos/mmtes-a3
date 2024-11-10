@@ -123,3 +123,41 @@ def exibir_menu_principal(user_id):
 
     # Exibe a tela do menu principal
     tela_menu.pack(fill="both", expand=True)
+
+# menu_principal.py
+def exibir_tela_administracao():
+    janela_admin = Toplevel()
+    janela_admin.title("Administração - Todas as Denúncias")
+    janela_admin.geometry("500x600")
+
+    def carregar_todas_denuncias():
+        for widget in frame_denuncias_admin.winfo_children():
+            widget.destroy()
+
+        denuncias = database.listar_todas_denuncias()
+        for denuncia in denuncias:
+            incident_id, data_hora, localizacao, bairro, texto, resolvido = denuncia
+            status_text = "Resolvido" if resolvido else "Pendente"
+            status_var = StringVar(value=status_text)
+
+            frame = Frame(frame_denuncias_admin)
+            frame.pack(pady=5, fill="x")
+
+            Label(frame, text=f"{data_hora} - {localizacao} - Bairro: {bairro}", font=("Arial", 10, "bold")).pack(anchor="w")
+            Label(frame, text=texto, wraplength=400, justify="left").pack(anchor="w", padx=10)
+            
+            status_menu = OptionMenu(frame, status_var, "Resolvido", "Pendente")
+            status_menu.pack(side="left", padx=10)
+
+            def salvar_status(incident_id=incident_id, status_var=status_var):
+                novo_status = status_var.get() == "Resolvido"
+                database.atualizar_status_denuncia(incident_id, novo_status)
+                carregar_todas_denuncias()  # Atualiza a lista
+
+            Button(frame, text="Salvar Status", command=salvar_status).pack(side="left")
+
+    # Frame para listar as denúncias
+    frame_denuncias_admin = Frame(janela_admin)
+    frame_denuncias_admin.pack(fill="both", expand=True, padx=10, pady=10)
+
+    carregar_todas_denuncias()
