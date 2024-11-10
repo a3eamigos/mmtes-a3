@@ -5,5 +5,12 @@ Repositório destinado ao trabalho de Modelos, Métodos e Técnicas de Engenhari
 
 Após clonar o repositório, execute o comando abaixo para configurar os hooks Git:
 
+Primeiro: 
+
+```chmod +x setup.sh
+./setup.sh
+
+Depois:
+
 ```bash
 ./setup.sh
