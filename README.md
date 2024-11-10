@@ -8,4 +8,5 @@ Antes de começar a alterar o projeto, siga os seguintes passos:
 1º Copiar o arquivo "commit-msg" na pasta hooks
 2º Procurar a sua pasta .git e depois acessar a pasta hooks
 3º Colar o arquivo "commit-msg" nessa pasta
-4º Abrir o terminal dentro da pasta .git/hooks e executar o comando ```chmod +x commit-msg
+4º Abrir o terminal dentro da pasta .git/hooks
+5º Tentar dar um commit com a mensagem errada: git commit -m "asdasd"
