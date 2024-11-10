@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Regex para verificar o padrão de Conventional Commits
+commit_regex="^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert|temp)(\(\S+\))?!?: .{1,50}"
+error_msg="A mensagem de commit deve seguir o padrão de Conventional Commits:
+Exemplo: feat(login): add login button"
+
+# Obtém a mensagem de commit
+commit_message=$(cat "$1")
+
+# Verifica se a mensagem de commit não corresponde ao regex
+if ! [[ "$commit_message" =~ $commit_regex ]]; then
+  echo "$error_msg"
+  exit 1
+fi
