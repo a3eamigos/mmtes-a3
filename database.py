@@ -72,6 +72,14 @@ def listar_denuncias_por_bairro(user_id, bairro):
     ''', (user_id, bairro))
     return cursor.fetchall()
 
+def listar_todas_denuncias():
+    cursor.execute("SELECT incident_id, incident_data_hora, incident_address, incident_bairro, incident_denuncia, incident_resolvido FROM Incident")
+    return cursor.fetchall()
+
+def atualizar_status_denuncia(incident_id, novo_status):
+    cursor.execute("UPDATE Incident SET incident_resolvido = ? WHERE incident_id = ?", (novo_status, incident_id))
+    con.commit()
+
 # Fecha a conexão ao encerrar
 def fechar_conexao():
     con.close()
