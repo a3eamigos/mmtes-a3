@@ -1,16 +1,11 @@
 # mmtes-a3
 Repositório destinado ao trabalho de Modelos, Métodos e Técnicas de Engenharia de Software
 
-### Configuração de Hooks Git
+# Configuração importante na .git
 
-Após clonar o repositório, execute o comando abaixo para configurar os hooks Git:
+Antes de começar a alterar o projeto, siga os seguintes passos:
 
-Primeiro: 
-
-```chmod +x setup.sh
-./setup.sh
-
-Depois:
-
-```bash
-./setup.sh
+1º Copiar o arquivo "commit-msg" na pasta hooks
+2º Procurar a sua pasta .git e depois acessar a pasta hooks
+3º Colar o arquivo "commit-msg" nessa pasta
+4º Abrir o terminal dentro da pasta .git/hooks e executar o comando ```chmod +x commit-msg
