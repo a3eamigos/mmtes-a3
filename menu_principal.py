@@ -2,7 +2,10 @@
 from tkinter import *
 from tkinter import messagebox, filedialog
 import database
+import sys
+from PyQt5.QtWidgets import QApplication
 from datetime import datetime
+from Mapa import MapaApp
 
 def exibir_menu_principal(user_id):
     janela = Tk()  # Cria uma nova janela
@@ -104,6 +107,17 @@ def exibir_menu_principal(user_id):
     # Tela de Acompanhamento de Denúncias
     tela_acompanhar_denuncias = Frame(janela)
     Label(tela_acompanhar_denuncias, text="Minhas Denúncias", font=("Arial", 16)).pack(pady=10)
+
+    # Carregar o mapa ao clicar
+    def abrir_mapa():
+        # Criar uma aplicação QApplication separada para o PyQt
+        app = QApplication(sys.argv)
+        mapa_app = MapaApp()
+        mapa_app.show()
+        sys.exit(app.exec_())  # Inicia o loop do PyQt
+
+    botao_mapa = Button(tela_acompanhar_denuncias, text ="Mapa", command= abrir_mapa)
+    botao_mapa.pack(pady=10)
 
     # Campo de entrada para filtrar por bairro
     Label(tela_acompanhar_denuncias, text="Filtrar por Bairro:").pack(pady=5)
