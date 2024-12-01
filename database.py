@@ -12,9 +12,9 @@ cursor = con.cursor()
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS User (
     user_cpf INTEGER PRIMARY KEY, 
-    user_name VARCHAR(100),  
-    user_email VARCHAR(100), 
-    user_password VARCHAR(100)
+    user_name VARCHAR(100) NOT NULL,  
+    user_email VARCHAR(100) NOT NULL, 
+    user_password VARCHAR(100) NOT NULL
 )
 ''')
 
@@ -22,9 +22,9 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Incident (
     incident_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     incident_user_cpf INTEGER, 
-    incident_address TEXT,
-    incident_bairro TEXT,
-    incident_denuncia TEXT,
+    incident_address TEXT NOT NULL,
+    incident_bairro TEXT NOT NULL,
+    incident_denuncia TEXT NOT NULL,
     incident_foto TEXT,
     incident_data_hora TIMESTAMP,
     incident_resolvido BOOLEAN,
@@ -34,16 +34,24 @@ CREATE TABLE IF NOT EXISTS Incident (
 
 # Funções CRUD
 def adicionar_usuario(nome, cpf, email, senha):
+    # Verificar se todos os campos foram preenchidos
+    if not all([nome, cpf, email, senha]):
+        raise ValueError("Todos os campos são obrigatórios. Nenhum valor pode ser nulo ou vazio.")
+
     data_user = (nome, cpf, email, senha)
     try:
         cursor.execute("INSERT INTO User (user_name, user_cpf, user_email, user_password) VALUES (?, ?, ?, ?);", data_user)
         con.commit()
+    except sqlite3.IntegrityError as e:
+        print(f"Erro de integridade: {e}")
+        con.rollback()
     except Exception as e:
         print(f"Ocorreu um erro: {e}")
         con.rollback()
 
+
 def verificar_usuario_existente(cpf, email):
-    cursor.execute("SELECT * FROM User WHERE user_cpf = ? OR user_email = ?", (cpf, email))
+    cursor.execute("SELECT * FROM User WHERE user_cpf = ? AND user_email = ?", (cpf, email))
     return cursor.fetchone() is not None
 
 def check_login(email, senha):
@@ -51,6 +59,8 @@ def check_login(email, senha):
     return cursor.fetchone()
 
 def registrar_denuncia(user_cpf, localizacao, bairro, denuncia_texto, foto_path=None):
+    if not all([localizacao, bairro, denuncia_texto]):
+        raise ValueError("Todos os campos são obrigatórios. Nenhum valor pode ser nulo ou vazio.")
     data_denuncia = (user_cpf, localizacao, bairro, denuncia_texto, foto_path, datetime.now(), False)
     cursor.execute('''
         INSERT INTO Incident (incident_user_cpf, incident_address, incident_bairro, incident_denuncia, incident_foto, incident_data_hora, incident_resolvido) 
