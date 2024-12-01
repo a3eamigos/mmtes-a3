@@ -8,7 +8,7 @@ import database
 import menu_principal
 
 # Função para criar placeholders
-janela = ttk.Window(themename="darkly")
+
 
 
 def criar_placeholder(entry, texto, is_password=False):
@@ -97,7 +97,7 @@ def cadastrar_usuario():
 
 
 # Configuração da janela principal
-janela = Tk()
+janela = ttk.Window(themename="darkly")
 janela.title("Relato Popular")
 janela.geometry("300x400")
 
