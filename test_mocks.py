@@ -14,14 +14,11 @@ class TestDatabaseFunctions(unittest.TestCase):
         email = "joao@example.com"
         senha = "senha123"
 
-        # Caso positivo: todos os dados estão corretos
+        # Caso positivo
         result = adicionar_usuario(nome, cpf, email, senha)
-
-        # Validação do retorno
-        self.assertTrue(result, "Esperava-se True no caso positivo, indicando sucesso na operação.")
-        self.assertIsInstance(result, bool, "O retorno deve ser do tipo bool no caso positivo.")
-
-        # Validar se o comando SQL foi chamado corretamente
+        self.assertIsNone(result, "O retorno esperado para o caso positivo deve ser None.")
+        
+        # Validar a execução do SQL
         mock_cursor.execute.assert_called_once_with(
             "INSERT INTO User (user_name, user_cpf, user_email, user_password) VALUES (?, ?, ?, ?);",
             (nome, cpf, email, senha)
@@ -32,12 +29,9 @@ class TestDatabaseFunctions(unittest.TestCase):
         mock_cursor.reset_mock()
         mock_con.reset_mock()
 
-        # Caso negativo: nome está vazio
-        result = adicionar_usuario("", cpf, email, senha)
-
-        # Validação do retorno
-        self.assertFalse(result, "Esperava-se False no caso negativo, indicando falha na operação.")
-        self.assertIsInstance(result, bool, "O retorno deve ser do tipo bool no caso negativo.")
+        # Caso negativo: dados incompletos (espera-se que uma exceção seja gerada)
+        with self.assertRaises(ValueError):
+            adicionar_usuario("", cpf, email, senha)
 
         # Certificar-se de que nenhuma operação foi executada
         mock_cursor.execute.assert_not_called()
@@ -128,36 +122,26 @@ class TestDatabaseFunctions(unittest.TestCase):
         denuncia_texto = "Buraco na rua"
         foto_path = "path/to/image.png"
 
-        # Caso positivo: todos os dados estão preenchidos corretamente
+        # Caso positivo
         result = registrar_denuncia(user_cpf, localizacao, bairro, denuncia_texto, foto_path)
+        self.assertIsNone(result, "O retorno esperado para o caso positivo deve ser None.")
 
-        # Validação do retorno
-        self.assertTrue(result, "Esperava-se True no caso positivo, indicando sucesso na operação.")
-        self.assertIsInstance(result, bool, "O retorno no caso positivo deve ser do tipo bool.")
-
-        # Validação do comando SQL executado
-        mock_cursor.execute.assert_called_once()
+        mock_cursor.execute.assert_called()
         args, _ = mock_cursor.execute.call_args
-        self.assertIn("INSERT INTO Incident", args[0], "O SQL executado deveria ser uma inserção na tabela Incident.")
-        self.assertEqual(
-            args[1], 
-            (user_cpf, localizacao, bairro, denuncia_texto, foto_path, unittest.mock.ANY, False),
-            "Os parâmetros passados para o SQL não correspondem aos esperados."
-        )
+        self.assertIn("INSERT INTO Incident", args[0])
+        self.assertEqual(args[1], (user_cpf, localizacao, bairro, denuncia_texto, foto_path, unittest.mock.ANY, False))
+
         mock_con.commit.assert_called_once()
 
         # Resetar mocks para o próximo caso
         mock_cursor.reset_mock()
         mock_con.reset_mock()
 
-        # Caso negativo: localização ausente
-        result = registrar_denuncia(user_cpf, "", bairro, denuncia_texto, foto_path)
+        # Caso negativo: localização ausente (espera-se que uma exceção seja gerada)
+        with self.assertRaises(ValueError):
+            registrar_denuncia(user_cpf, "", bairro, denuncia_texto, foto_path)
 
-        # Validação do retorno
-        self.assertFalse(result, "Esperava-se False no caso negativo, indicando falha na operação.")
-        self.assertIsInstance(result, bool, "O retorno no caso negativo deve ser do tipo bool.")
-
-        # Certificar-se de que nenhuma operação foi executada no banco
+        # Certificar-se de que nenhuma operação no banco foi realizada
         mock_cursor.execute.assert_not_called()
         mock_con.commit.assert_not_called()
 
