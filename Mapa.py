@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLi
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
 
+
 class MapaApp(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -19,7 +20,8 @@ class MapaApp(QMainWindow):
 
         # Input para Localização
         self.location_input = QLineEdit(self)
-        self.location_input.setPlaceholderText("Digite uma localização para visualização")
+        self.location_input.setPlaceholderText(
+            "Digite uma localização para visualização")
 
         self.add_button = QPushButton("Visualizar Localização", self)
         self.add_button.clicked.connect(self.adicionar_marcacao)
@@ -35,14 +37,23 @@ class MapaApp(QMainWindow):
         self.marcadores = []
         self.carregar_marcadores_do_banco()
         self.carregar_mapa()
+        # Criar o botão de fechar
+        self.fechar_btn = QPushButton('Fechar')
+        # Conectar o clique do botão à função de fechamento
+        self.fechar_btn.clicked.connect(self.fechar_mapa)
+        self.layout.addWidget(self.fechar_btn)
+
+    def fechar_mapa(self):
+        # Fecha a aplicação ao chamar o close()
+        self.close()
 
     def carregar_marcadores_do_banco(self):
         # Obtém as localizações das denúncias do banco de dados
         enderecos = database.obter_todos_enderecos()
-        
+
         # Verifique se os endereços foram obtidos corretamente
         print("Endereços obtidos do banco:", enderecos)
-        
+
         for endereco in enderecos:
             coordenadas = self.obter_coordenadas(endereco)
             if coordenadas:
@@ -55,7 +66,8 @@ class MapaApp(QMainWindow):
     def carregar_mapa(self):
         latitude_inicial = -12.9714
         longitude_inicial = -38.5014
-        mapa = folium.Map(location=[latitude_inicial, longitude_inicial], zoom_start=12)
+        mapa = folium.Map(
+            location=[latitude_inicial, longitude_inicial], zoom_start=12)
 
         # Adiciona os marcadores obtidos do banco de dados
         for marcador in self.marcadores:
@@ -66,14 +78,16 @@ class MapaApp(QMainWindow):
 
         # Salvar e carregar o mapa
         mapa.save("mapa_interativo.html")
-        self.map_view.setUrl(QUrl.fromLocalFile(os.path.abspath("mapa_interativo.html")))
+        self.map_view.setUrl(QUrl.fromLocalFile(
+            os.path.abspath("mapa_interativo.html")))
         self.map_view.reload()  # Força a atualização da visualização do mapa
 
     def adicionar_marcacao(self):
         location = self.location_input.text()
 
         if not location:
-            QMessageBox.warning(self, "Erro", "Por favor, insira uma localização.")
+            QMessageBox.warning(
+                self, "Erro", "Por favor, insira uma localização.")
             return
 
         coordenadas = self.obter_coordenadas(location)
@@ -97,6 +111,7 @@ class MapaApp(QMainWindow):
                 lng = float(data[0]["lon"])
                 return {"lat": lat, "lng": lng}
         return None
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
