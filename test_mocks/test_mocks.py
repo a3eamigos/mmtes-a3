@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 from database import (adicionar_usuario, check_login, registrar_denuncia, listar_denuncias, 
                       listar_denuncias_por_bairro, listar_todas_denuncias, 
-                      atualizar_status_denuncia, verificar_usuario_existente)
+                      atualizar_status_denuncia, obter_todos_enderecos, verificar_usuario_existente)
 
 class TestDatabaseFunctions(unittest.TestCase):
 
