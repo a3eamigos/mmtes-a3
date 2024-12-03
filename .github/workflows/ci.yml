@@ -49,7 +49,7 @@ jobs:
 
     - name: Rodar testes
       run: |
-        python -m unittest discover -s test_mocks
+        python -m unittest discover -s test_mocks.py
 
     - name: Gerar versão semântica
       id: version
