@@ -1,5 +1,5 @@
 def mensagem():
-    return "Se n funcionar, Helder vai ..."
+    return "Se n funcionar, tem que verificar o ..."
 
 
 if __name__ == "__main__":
