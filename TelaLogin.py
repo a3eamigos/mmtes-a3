@@ -97,7 +97,7 @@ def cadastrar_usuario():
 
 
 # Configuração da janela principal
-janela = ttk.Window(themename="darkly")
+janela = ttk.Window(themename="cosmo")
 janela.title("Relato Popular")
 janela.geometry("300x400")
 
