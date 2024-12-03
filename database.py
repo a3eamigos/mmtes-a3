@@ -79,6 +79,10 @@ def listar_todas_denuncias():
 def atualizar_status_denuncia(incident_id, novo_status):
     cursor.execute("UPDATE Incident SET incident_resolvido = ? WHERE incident_id = ?", (novo_status, incident_id))
     con.commit()
+    
+def obter_todos_enderecos():
+    cursor.execute("SELECT incident_address FROM Incident WHERE incident_resolvido = 0")
+    return [row[0] for row in cursor.fetchall()]
 
 # Fecha a conexão ao encerrar
 def fechar_conexao():
