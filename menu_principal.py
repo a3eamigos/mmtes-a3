@@ -1,6 +1,7 @@
 # menu_principal.py
 from tkinter import *
 from tkinter import messagebox, filedialog
+from tkinter import ttk
 import database
 import sys
 from PyQt5.QtWidgets import QApplication
